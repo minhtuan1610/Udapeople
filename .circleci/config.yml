@@ -23,6 +23,10 @@ jobs:
           event: fail
           channel: circleci-tuannm74
           template: basic_fail_1
+      - slack/notify:
+          event: pass
+          channel: circleci-tuannm74
+          template: success_tagged_deployment_1
 
   build-backend:
     docker:
@@ -44,6 +48,10 @@ jobs:
           event: fail
           channel: circleci-tuannm74
           template: basic_fail_1
+      - slack/notify:
+          event: pass
+          channel: circleci-tuannm74
+          template: success_tagged_deployment_1
 
   test-frontend:
     docker:
@@ -62,6 +70,10 @@ jobs:
           event: fail
           channel: circleci-tuannm74
           template: basic_fail_1
+      - slack/notify:
+          event: pass
+          channel: circleci-tuannm74
+          template: success_tagged_deployment_1
 
   test-backend:
     docker:
@@ -80,6 +92,10 @@ jobs:
           event: fail
           channel: circleci-tuannm74
           template: basic_fail_1
+      - slack/notify:
+          event: pass
+          channel: circleci-tuannm74
+          template: success_tagged_deployment_1
 
   scan-frontend:
     docker:
@@ -98,6 +114,10 @@ jobs:
           event: fail
           channel: circleci-tuannm74
           template: basic_fail_1
+      - slack/notify:
+          event: pass
+          channel: circleci-tuannm74
+          template: success_tagged_deployment_1
   
   scan-backend:
     docker:
@@ -116,11 +136,6 @@ jobs:
           event: fail
           channel: circleci-tuannm74
           template: basic_fail_1
-
-  notify_on_success:
-    docker:
-      - image: cimg/base
-    steps:
       - slack/notify:
           event: pass
           channel: circleci-tuannm74
