@@ -1,15 +1,6 @@
 version: 2.1
-
 orbs:
   slack: circleci/slack@4.12.5
-
-commands:
-  notify-on-failure:
-    step:
-      - slack/notify:
-          event: fail
-          channel: circleci-tuannm74
-          template: basic_fail_1
 
 jobs:
   build-frontend:
@@ -28,7 +19,10 @@ jobs:
       - save_cache:
           paths: [ frontend/node_modules ]
           key: frontend-build
-      - notify_on_failure
+      - slack/notify:
+          event: fail
+          channel: circleci-tuannm74
+          template: basic_fail_1
 
   build-backend:
     docker:
@@ -46,7 +40,10 @@ jobs:
       - save_cache:
           paths: [ backend/node_modules ]
           key: backend-build
-      - notify_on_failure
+      - slack/notify:
+          event: fail
+          channel: circleci-tuannm74
+          template: basic_fail_1
 
   test-frontend:
     docker:
@@ -61,7 +58,10 @@ jobs:
             cd frontend
             npm install
             npm run test
-      - notify_on_failure
+      - slack/notify:
+          event: fail
+          channel: circleci-tuannm74
+          template: basic_fail_1
 
   test-backend:
     docker:
@@ -76,7 +76,10 @@ jobs:
             cd backend
             npm install
             npm run test
-      - notify_on_failure
+      - slack/notify:
+          event: fail
+          channel: circleci-tuannm74
+          template: basic_fail_1
 
   scan-frontend:
     docker:
@@ -91,7 +94,10 @@ jobs:
             cd frontend
             npm install
             npm audit fix --audit-level=critical --force
-      - notify_on_failure
+      - slack/notify:
+          event: fail
+          channel: circleci-tuannm74
+          template: basic_fail_1
   
   scan-backend:
     docker:
@@ -106,7 +112,10 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical --force
-      - notify_on_failure
+      - slack/notify:
+          event: fail
+          channel: circleci-tuannm74
+          template: basic_fail_1
 
   notify_on_success:
     docker:
