@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  slack: circleci/slack@4.1
+  slack: circleci/slack@4.12.1
 
 jobs:
   build-frontend:
@@ -26,7 +26,7 @@ jobs:
       - slack/notify:
           event: pass
           channel: circleci-tuannm74
-          template: success_tagged_deployment_1
+          template: basic_success_1
 
   build-backend:
     docker:
@@ -51,7 +51,7 @@ jobs:
       - slack/notify:
           event: pass
           channel: circleci-tuannm74
-          template: success_tagged_deployment_1
+          template: basic_success_1
 
   test-frontend:
     docker:
@@ -73,7 +73,7 @@ jobs:
       - slack/notify:
           event: pass
           channel: circleci-tuannm74
-          template: success_tagged_deployment_1
+          template: basic_success_1
 
   test-backend:
     docker:
@@ -95,7 +95,7 @@ jobs:
       - slack/notify:
           event: pass
           channel: circleci-tuannm74
-          template: success_tagged_deployment_1
+          template: basic_success_1
 
   scan-frontend:
     docker:
@@ -117,7 +117,7 @@ jobs:
       - slack/notify:
           event: pass
           channel: circleci-tuannm74
-          template: success_tagged_deployment_1
+          template: basic_success_1
   
   scan-backend:
     docker:
@@ -139,15 +139,13 @@ jobs:
       - slack/notify:
           event: pass
           channel: circleci-tuannm74
-          template: success_tagged_deployment_1
+          template: basic_success_1
 
 workflows:
   default:
     jobs:
       - build-frontend:
-          context: slack-secrets
       - build-backend:
-          context: slack-secrets
       - test-frontend:
           requires: [ build-frontend ]
       - test-backend:
