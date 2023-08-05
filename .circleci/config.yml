@@ -450,6 +450,8 @@ workflows:
           filters:
             branches:
               only: [ develop ]
+      - configure-infrastructure:
+          requires: [ deploy-infrastructure ]
       - run-migrations:
           requires: [ configure-infrastructure ]
       - deploy-frontend:
