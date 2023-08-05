@@ -305,7 +305,7 @@ jobs:
   run-migrations:
     docker:
       # Docker image here that supports NodeJS
-      - image: cimg/node:14.21.3
+      - image: cimg/node:13.8.0
     steps:
       # Checkout code from git
       - checkout
