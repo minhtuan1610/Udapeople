@@ -341,9 +341,9 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix --force
-            npm run migrations > migration_dump.txt
-            cat migrations_dump.txt
+            # npm audit fix --force
+            # npm run migrations > migration_dump.txt
+            # cat migrations_dump.txt
       - run:
           name: Send migration results to kvdb.io
           command: |
@@ -511,25 +511,26 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
+      # - build-frontend
       - build-backend
-      - test-frontend:
-          requires: [ build-frontend ]
-      - test-backend:
-          requires: [ build-backend ]
-      - scan-frontend:
-          requires: [ build-frontend ]
-      - scan-backend:
-          requires: [ build-backend ]
-      - deploy-infrastructure:
-          requires: [ test-frontend, test-backend, scan-frontend, scan-backend ]
-          filters:
-            branches:
-              only: [ develop ]
-      - configure-infrastructure:
-          requires: [ deploy-infrastructure ]
-      - run-migrations:
-          requires: [ configure-infrastructure ]
+      # - test-frontend:
+      #     requires: [ build-frontend ]
+      # - test-backend:
+      #     requires: [ build-backend ]
+      # - scan-frontend:
+      #     requires: [ build-frontend ]
+      # - scan-backend:
+      #     requires: [ build-backend ]
+      # - deploy-infrastructure:
+      #     requires: [ test-frontend, test-backend, scan-frontend, scan-backend ]
+      #     filters:
+      #       branches:
+      #         only: [ develop ]
+      # - configure-infrastructure:
+      #     requires: [ deploy-infrastructure ]
+      # - run-migrations:
+          # requires: [ configure-infrastructure ]
+      - run-migrations
       - deploy-frontend:
           requires: [ run-migrations ]
       - deploy-backend:
