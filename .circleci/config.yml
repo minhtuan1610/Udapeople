@@ -330,17 +330,18 @@ jobs:
             echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY >> "backend/.env"
             echo AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN >> "backend/.env"
             echo SLACK_ACCESS_TOKEN=$SLACK_ACCESS_TOKEN >> "backend/.env"
-            echo SLACK_DEFAULT_CHANNEL=$SLACK_DEFAULT_CHANNEL >> "backend/.env"
+            echo SLACK_DEFAULT_CHANNEL=$SLACK_DEFAULT_CHANNEL >> "backend/.env"            
+            cat backend/.env
       - run:
           name: Install dependencies
           command: |
+            ifconfig -a
             sudo apt update
             sudo apt install -y awscli
       - run:
           name: Run migrations
           command: |
             cd backend
-            cat .env
             npm install
             # npm audit fix --force
             npm run migrations
