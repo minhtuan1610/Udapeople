@@ -288,12 +288,12 @@ jobs:
             echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> "backend/.env"            
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> "backend/.env"
-            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+            echo TYPEORM_HOST="database-1.cehbgpadyw6x.us-east-1.rds.amazonaws.com" >> "backend/.env"
             echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> "backend/.env"
             echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> "backend/.env"
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+            echo TYPEORM_PASSWORD=12345678 >> "backend/.env"
             echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+            echo TYPEORM_USERNAME=postgres >> "backend/.env"
             cat backend/.env
             cd .circleci/ansible
             echo "Contents of the inventory.txt: "
@@ -342,7 +342,7 @@ jobs:
             cd backend
             npm install
             # npm audit fix --force
-            # npm run migrations
+            npm run migrations
             # npm run migrations > migration_dump.txt
             # cat migrations_dump.txt
       - run:
