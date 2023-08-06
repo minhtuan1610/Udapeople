@@ -320,10 +320,10 @@ jobs:
             echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> backend/.env
             echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> backend/.env
             echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> backend/.env
-            echo TYPEORM_HOST=$TYPEORM_HOST >> backend/.env
+            echo TYPEORM_HOST="database-1.cehbgpadyw6x.us-east-1.rds.amazonaws.com" >> backend/.env
             echo TYPEORM_PORT=$TYPEORM_PORT >> backend/.env
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
+            echo TYPEORM_USERNAME=postgres >> backend/.env
+            echo TYPEORM_PASSWORD=12345678 >> backend/.env
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env
             echo AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID >> "backend/.env"
             echo AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION >> "backend/.env"
