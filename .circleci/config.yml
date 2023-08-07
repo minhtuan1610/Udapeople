@@ -465,7 +465,7 @@ jobs:
             
             cd .circleci/ansible
             cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            ansible-playbook deploy-backend.yml -i inventory.txt -vvv
 
       # Here's where you will add some code to rollback on failure
       - destroy-environment
