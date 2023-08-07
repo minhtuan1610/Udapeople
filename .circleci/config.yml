@@ -405,7 +405,7 @@ jobs:
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
-      - image: python:alpine3.16
+      - image: cimg/base:stable
     steps:
       # Checkout code from git
       - checkout
