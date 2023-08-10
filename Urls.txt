@@ -1,0 +1,4 @@
+Public Url to GitHub repository [URL01]
+    https://github.com/minhtuan1610/Udapeople
+Public Url for your S3 Bucket [URL02]
+    http://udapeople-635b84f.s3-website-us-east-1.amazonaws.com/
