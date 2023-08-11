@@ -90,14 +90,6 @@ jobs:
       - save_cache:
           paths: [ frontend/node_modules ]
           key: frontend-build
-      - slack/notify:
-          event: fail
-          channel: circleci-tuannm74
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          channel: circleci-tuannm74
-          template: basic_success_1
 
   build-backend:
     docker:
@@ -115,14 +107,6 @@ jobs:
       - save_cache:
           paths: [ backend/node_modules ]
           key: backend-build
-      - slack/notify:
-          event: fail
-          channel: circleci-tuannm74
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          channel: circleci-tuannm74
-          template: basic_success_1
 
   test-frontend:
     docker:
@@ -137,14 +121,6 @@ jobs:
             cd frontend
             npm install
             npm run test
-      - slack/notify:
-          event: fail
-          channel: circleci-tuannm74
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          channel: circleci-tuannm74
-          template: basic_success_1
 
   test-backend:
     docker:
@@ -159,14 +135,6 @@ jobs:
             cd backend
             npm install
             npm run test
-      - slack/notify:
-          event: fail
-          channel: circleci-tuannm74
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          channel: circleci-tuannm74
-          template: basic_success_1
 
   scan-frontend:
     docker:
@@ -181,14 +149,6 @@ jobs:
             cd frontend
             npm install
             npm audit fix --audit-level=critical --force
-      - slack/notify:
-          event: fail
-          channel: circleci-tuannm74
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          channel: circleci-tuannm74
-          template: basic_success_1
   
   scan-backend:
     docker:
@@ -203,14 +163,6 @@ jobs:
             cd backend
             npm install
             npm audit fix --audit-level=critical --force
-      - slack/notify:
-          event: fail
-          channel: circleci-tuannm74
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          channel: circleci-tuannm74
-          template: basic_success_1
 
   deploy-infrastructure:
     docker:
@@ -397,7 +349,14 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-
+      - slack/notify:
+          event: fail
+          channel: circleci-tuannm74
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          channel: circleci-tuannm74
+          template: basic_success_1
       # Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations
@@ -466,7 +425,14 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-
+      - slack/notify:
+          event: fail
+          channel: circleci-tuannm74
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          channel: circleci-tuannm74
+          template: basic_success_1
       # Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations
