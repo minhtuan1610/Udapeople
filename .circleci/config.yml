@@ -65,7 +65,7 @@ commands:
           when: on_fail
           command: |
             SUCCESS = $(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>)
-            if[[ "${SUCCESS}" == "1" ]]; 
+            if [[ "${SUCCESS}" == "1" ]]; 
             then
               cd ~/project/backend
               npm install
@@ -528,15 +528,6 @@ jobs:
       - checkout
       - install_awscli
       - install_nodejs
-      - run:
-          name: Fetch old stack workflow id
-          command: |
-            export STACKS=($(aws cloudformation list-stacks \
-                --query "StackSummaries[*].StackName" \
-                --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
-            echo Stack names: "${STACKS[@]}"
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/old_workflow_id3)
-            echo old Workflow ID: $OldWorkflowID
       - run:
           name: Remove old stacks and files
           command: |
