@@ -65,8 +65,8 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(curl --insecure  https://kvdb.io/5aVBGZv9UWcVKVtGmZkGcL/migration_<< parameters.Workflow_ID >>)
-            echo ${SUCCESS}
-            if [[ ${SUCCESS} == 1 ]]; 
+            echo $SUCCESS
+            if [[ "$SUCCESS==1" ]]; 
             then
               cd ~/project/backend
               npm install
@@ -264,6 +264,11 @@ jobs:
       - restore_cache:
           keys: [ backend-build ]
       - run:
+          name: Install dependencies
+          command: |
+            sudo apt update
+            sudo apt install -y awscli curl npm
+      - run:
           name: Prepare environment for backend build
           command: |
             echo "Preparing environment for backend build"
@@ -285,12 +290,6 @@ jobs:
             echo SLACK_DEFAULT_CHANNEL=$SLACK_DEFAULT_CHANNEL >> "backend/.env"            
             cat backend/.env
       - run:
-          name: Install dependencies
-          command: |
-            ifconfig -a
-            sudo apt update
-            sudo apt install -y awscli
-      - run:
           name: Run migrations
           command: |
             cd backend
@@ -302,6 +301,7 @@ jobs:
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migration_dump.txt
             then
+              echo "Save migration workflow"
               echo "${KVDB_BUCKET}"
               echo"https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}"
               curl --insecure https://kvdb.io/5aVBGZv9UWcVKVtGmZkGcL/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
