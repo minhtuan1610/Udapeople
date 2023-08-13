@@ -268,9 +268,9 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt update
-            sudo apt install -y awscli curl npm
+            sudo apt install -y awscli
       - run:
-          name: Prepare environment for backend build
+          name: Run migrations
           command: |
             echo "Preparing environment for backend build"
             echo ENVIRONMENT=production > "backend/.env"
@@ -291,9 +291,7 @@ jobs:
             echo SLACK_ACCESS_TOKEN=$SLACK_ACCESS_TOKEN >> "backend/.env"
             echo SLACK_DEFAULT_CHANNEL=$SLACK_DEFAULT_CHANNEL >> "backend/.env"            
             cat backend/.env
-      - run:
-          name: Run migrations
-          command: |
+            
             cd backend
             npm install
             npm run migrations > migration_dump.txt
