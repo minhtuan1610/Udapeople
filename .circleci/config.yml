@@ -64,12 +64,8 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            # export BACKEND_IP=$(aws ec2 describe-instances \
-            #  --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            #  --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            #  --output text)
-            # SUCCESS=$(curl http://${BACKEND_IP}:8080)
-            SUCCESS=$(curl --insecure  https://kvdb.io/HJKpZ3VwxErupBrLBShBo6/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            export BACKEND_IP=$(aws ec2 describe-instances --instance-ids i-0728b6cee1d7aecd3 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
+            SUCCESS=$(curl http://${BACKEND_IP}:8080)
             echo $SUCCESS
             if [[ "${SUCCESS}" == "1" ]] 
             then
@@ -308,13 +304,9 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migration_dump.txt
             then
               echo "Save migration workflow" 
-              # echo "get backend ip"
-              # export BACKEND_IP=$(aws ec2 describe-instances \
-              # --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              # --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              # --output text)
-              # curl --header "Content-Type: application/json" --request POST --data '{"title":"1"}' http://${BACKEND_IP}:8080
-              curl --insecure https://kvdb.io/HJKpZ3VwxErupBrLBShBo6/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              echo "get backend ip"
+              export BACKEND_IP_SERVER=$(aws ec2 describe-instances --instance-ids i-0728b6cee1d7aecd3 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
+              curl --header "Content-Type: application/json" --request POST --data '{"title":"1"}' http://${BACKEND_IP_SERVER}:8080
             fi
       # Here's where you will add some code to rollback on failure
       - destroy-environment
@@ -450,7 +442,7 @@ jobs:
   smoke-test:
     docker:
       # Lightweight Docker image
-      - image: circleci/node:13.8.0
+      - image: python:3.10-alpine3.16
     steps:
       # Checkout code from git
       - checkout
@@ -477,9 +469,6 @@ jobs:
             echo $BACKEND
             export API_URL="http://${BACKEND}:3030"
             echo "API_URL=${API_URL}"
-
-            echo "Sleeping for 1 minute"
-            sleep 60
 
             if curl -v "${API_URL}/api/status" | grep "ok"
             then
@@ -519,7 +508,8 @@ jobs:
                       list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                       --no-paginate --output text)
             echo "Old Workflow ID: $OLD_WORKFLOW_ID"
-            curl https://kvdb.io/${KVDB_BUCKET}/old_workflow_id3 -d "${OLD_WORKFLOW_ID}"
+            export BACKEND_IP_SERVER=$(aws ec2 describe-instances --instance-ids i-0728b6cee1d7aecd3 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
+            curl --header "Content-Type: application/json" --request POST --data '{"title":"${OLD_WORKFLOW_ID}"}' http://${BACKEND_IP_SERVER}:8080
       - run:
           name: Update cloudfront distribution
           command: |
@@ -548,7 +538,8 @@ jobs:
                 --query "StackSummaries[*].StackName" \
                 --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo Stack names: "${STACKS[@]}"
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/old_workflow_id3)
+            export BACKEND_IP_SERVER=$(aws ec2 describe-instances --instance-ids i-0728b6cee1d7aecd3 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
+            export OldWorkflowID=$(curl http://${BACKEND_IP_SERVER}:8080)
             echo old Workflow ID: $OldWorkflowID
       - run:
           name: Remove old stacks and files
@@ -557,7 +548,7 @@ jobs:
                 --query "StackSummaries[*].StackName" \
                 --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo Stack names: "${STACKS[@]}"
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/old_workflow_id3)
+            export OldWorkflowID=$(curl http://${BACKEND_IP_SERVER}:8080)
             echo old Workflow ID: $OldWorkflowID
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
