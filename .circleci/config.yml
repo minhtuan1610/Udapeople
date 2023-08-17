@@ -507,7 +507,7 @@ jobs:
                       --no-paginate --output text)
             echo "Old Workflow ID: $OLD_WORKFLOW_ID"
             export BACKEND_IP_SERVER=$(aws ec2 describe-instances --instance-ids i-0728b6cee1d7aecd3 --query 'Reservations[].Instances[].PublicIpAddress' --output text)
-            curl --header "Content-Type: application/json" --request POST --data '{"title":${OLD_WORKFLOW_ID}}' http://${BACKEND_IP_SERVER}:8080
+            curl --header "Content-Type: application/json" --request POST --data '{"title":'"$OLD_WORKFLOW_ID"}' http://${BACKEND_IP_SERVER}:8080
       - run:
           name: Update cloudfront distribution
           command: |
